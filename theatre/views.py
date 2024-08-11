@@ -2,6 +2,8 @@ from datetime import datetime
 
 from django.db.models import F, Count
 from django.shortcuts import render
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets, mixins
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.viewsets import GenericViewSet
@@ -71,10 +73,32 @@ class PlayViewSet(
 
         return PlaySerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "genres",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter by genre id (ex. ?genres=2,5)",
+            ),
+            OpenApiParameter(
+                "actors",
+                type={"type": "list", "items": {"type": "number"}},
+                description="Filter by actor id (ex. ?actors=2,5)",
+            ),
+            OpenApiParameter(
+                "title",
+                type=OpenApiTypes.STR,
+                description="Filter by play title (ex. ?title=fiction)",
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class PerformanceViewSet(viewsets.ModelViewSet):
     queryset = (
-        Performance.objects.all()
+        Performance.objects
         .select_related("play", "theatre_hall")
         .annotate(
             tickets_available=(
@@ -108,6 +132,26 @@ class PerformanceViewSet(viewsets.ModelViewSet):
             return PerformanceDetailSerializer
 
         return PerformanceSerializer
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "play",
+                type=OpenApiTypes.INT,
+                description="Filter by play id (ex. ?movie=2)",
+            ),
+            OpenApiParameter(
+                "date",
+                type=OpenApiTypes.DATE,
+                description=(
+                        "Filter by datetime of Performance "
+                        "(ex. ?date=2024-08-23)"
+                ),
+            ),
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class ReservationPagination(PageNumberPagination):
