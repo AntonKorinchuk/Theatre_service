@@ -9,11 +9,12 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet
 
-from theatre.models import Actor, Genre, TheatreHall, Play, Performance, Reservation
+from theatre.models import Actor, Genre, TheatreHall, Play, Performance, Reservation, Ticket
 from theatre.permissions import IsAdminOrIfAuthenticatedReadOnly
 from theatre.serializers import ActorSerializer, GenreSerializer, TheatreHallSerializer, PlaySerializer, \
     PlayListSerializer, PlayDetailSerializer, PerformanceSerializer, PerformanceListSerializer, \
-    PerformanceDetailSerializer, ReservationSerializer, ReservationListSerializer
+    PerformanceDetailSerializer, ReservationSerializer, ReservationListSerializer, TicketListSerializer, \
+    TicketSerializer
 
 
 class ActorViewSet(viewsets.ModelViewSet):
@@ -178,9 +179,6 @@ class ReservationViewSet(
     pagination_class = ReservationPagination
     permission_classes = (IsAuthenticated,)
 
-    def get_queryset(self):
-        return Reservation.objects.filter(user=self.request.user)
-
     def get_serializer_class(self):
         if self.action == "list":
             return ReservationListSerializer
@@ -189,3 +187,17 @@ class ReservationViewSet(
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class TicketsViewSet(
+    mixins.ListModelMixin,
+    GenericViewSet,
+):
+    queryset = Ticket.objects.all()
+    serializer_class = TicketSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return TicketListSerializer
+        return TicketSerializer
