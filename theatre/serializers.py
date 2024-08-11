@@ -122,7 +122,7 @@ class ReservationSerializer(serializers.ModelSerializer):
         fields = ("id", "tickets", "created_at")
 
     def create(self, validated_data):
-        tickets_data = validated_data.pop('tickets')
+        tickets_data = validated_data.pop("tickets")
         with transaction.atomic():
             reservation = Reservation.objects.create(**validated_data)
             for ticket_data in tickets_data:
