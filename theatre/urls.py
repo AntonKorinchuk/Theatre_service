@@ -2,12 +2,12 @@ from django.urls import include, path
 from rest_framework import routers
 
 from theatre.views import (
-    GenreViewSet,
     ActorViewSet,
-    TheatreHallViewSet,
-    PlayViewSet,
+    GenreViewSet,
     PerformanceViewSet,
+    PlayViewSet,
     ReservationViewSet,
+    TheatreHallViewSet,
     TicketsViewSet,
 )
 
@@ -20,8 +20,6 @@ router.register("performances", PerformanceViewSet)
 router.register("reservations", ReservationViewSet)
 router.register("tickets", TicketsViewSet)
 
-urlpatterns = [
-    path("", include(router.urls)),
-]
+urlpatterns = router.urls
 
 app_name = "theatre"

@@ -90,7 +90,14 @@ class Ticket(models.Model):
             ValidationError,
         )
 
-    def save(self, *args, force_insert=False, force_update=False, using=None, update_fields=None):
+    def save(
+            self,
+            *args,
+            force_insert=False,
+            force_update=False,
+            using=None,
+            update_fields=None
+    ):
         self.full_clean()
         return super(Ticket, self).save(
             force_insert, force_update, using, update_fields
@@ -107,7 +114,9 @@ class Ticket(models.Model):
 class Reservation(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reservations"
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="reservations"
     )
 
     def __str__(self) -> str:

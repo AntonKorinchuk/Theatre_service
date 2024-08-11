@@ -1,12 +1,11 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-
-from rest_framework.test import APIClient
 from rest_framework import status
+from rest_framework.test import APIClient
 
-from theatre.models import Play, Performance, TheatreHall, Genre, Actor
-from theatre.serializers import PlayListSerializer, PlayDetailSerializer
+from theatre.models import Actor, Genre, Performance, Play, TheatreHall
+from theatre.serializers import PlayDetailSerializer, PlayListSerializer
 
 PLAY_URL = reverse("theatre:play-list")
 PERFORMANCE_URL = reverse("theatre:performance-list")

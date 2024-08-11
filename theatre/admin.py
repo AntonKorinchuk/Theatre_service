@@ -1,13 +1,13 @@
 from django.contrib import admin
 
 from .models import (
-    TheatreHall,
-    Genre,
     Actor,
-    Play,
+    Genre,
     Performance,
+    Play,
     Reservation,
-    Ticket,
+    TheatreHall,
+    Ticket
 )
 
 admin.site.register(TheatreHall)
