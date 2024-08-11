@@ -174,7 +174,7 @@ class ReservationViewSet(
 ):
     queryset = Reservation.objects.prefetch_related(
         "tickets__performance__play", "tickets__performance__theatre_hall"
-    )
+    ).order_by("-created_at")
     serializer_class = ReservationSerializer
     pagination_class = ReservationPagination
     permission_classes = (IsAuthenticated,)
